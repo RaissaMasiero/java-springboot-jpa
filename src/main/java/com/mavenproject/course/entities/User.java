@@ -1,8 +1,11 @@
 package com.mavenproject.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +19,10 @@ public class User implements Serializable {
     private String email;
     private String fone;
     private String senha;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cliente")
+    private List<Order> pedidos = new ArrayList<>();
 
     public User(){}
 
@@ -65,6 +72,10 @@ public class User implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public List<Order> getPedidos() {
+        return pedidos;
     }
 
     @Override
