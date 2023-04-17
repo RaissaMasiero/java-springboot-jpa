@@ -1,6 +1,7 @@
 package com.mavenproject.course.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mavenproject.course.entities.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -18,15 +19,18 @@ public class Order implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant data;
 
+    private Integer status;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private User cliente;
 
     public Order(){}
 
-    public Order(Long id, Instant data, User cliente) {
+    public Order(Long id, Instant data, OrderStatus status, User cliente) {
         this.id = id;
         this.data = data;
+        setStatus(status);
         this.cliente = cliente;
     }
 
@@ -44,6 +48,16 @@ public class Order implements Serializable {
 
     public void setData(Instant data) {
         this.data = data;
+    }
+
+    public OrderStatus getStatus() {
+        return OrderStatus.valueOf(status);
+    }
+
+    public void setStatus(OrderStatus status) {
+        if(status != null) {
+           this.status = status.getCod();
+        }
     }
 
     public User getCliente() {
