@@ -1,5 +1,6 @@
 package com.mavenproject.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -15,7 +16,9 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    @Transient
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "categorias")
     private Set<Product> produtos = new HashSet<>();
 
     public Category(){}
