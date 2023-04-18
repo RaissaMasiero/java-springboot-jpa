@@ -1,5 +1,6 @@
 package com.mavenproject.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -23,6 +24,9 @@ public class Product implements Serializable {
     @JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"),
                inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categorias = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.produto")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Product(){}
 
@@ -76,6 +80,15 @@ public class Product implements Serializable {
 
     public Set<Category> getCategorias() {
         return categorias;
+    }
+
+    @JsonIgnore
+    public Set<Order> getPedidos(){
+        Set<Order> set = new HashSet<>();
+        for(OrderItem x : items){
+            set.add(x.getPedido());
+        }
+        return set;
     }
 
     @Override
