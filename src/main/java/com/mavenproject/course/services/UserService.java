@@ -30,4 +30,16 @@ public class UserService {
     public void delete(Long id){
         repository.deleteById(id);
     }
+
+    public User update(Long id, User obj){
+        User entidade = repository.getReferenceById(id); // instancia usuário temporário
+        updateData(entidade, obj);
+        return repository.save(entidade);
+    }
+
+    private void updateData(User entidade, User obj) {
+        entidade.setNome(obj.getNome());
+        entidade.setEmail(obj.getEmail());
+        entidade.setFone(obj.getFone());
+    }
 }
