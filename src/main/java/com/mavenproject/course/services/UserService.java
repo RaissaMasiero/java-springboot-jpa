@@ -4,6 +4,7 @@ import com.mavenproject.course.entities.User;
 import com.mavenproject.course.repositories.UserRepository;
 import com.mavenproject.course.services.exceptions.DatabaseException;
 import com.mavenproject.course.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -44,9 +45,13 @@ public class UserService {
     }
 
     public User update(Long id, User obj){
-        User entidade = repository.getReferenceById(id); // instancia usuário temporário
-        updateData(entidade, obj);
-        return repository.save(entidade);
+        try {
+            User entidade = repository.getReferenceById(id); // instancia usuário temporário
+            updateData(entidade, obj);
+            return repository.save(entidade);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User entidade, User obj) {
